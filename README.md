@@ -1,4 +1,4 @@
-# happ_chat_app
+# happy_chat_app
 
 A new Flutter project.
 
