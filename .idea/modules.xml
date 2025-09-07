@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/happ_chat_app.iml" filepath="$PROJECT_DIR$/happ_chat_app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/android/happ_chat_app_android.iml" filepath="$PROJECT_DIR$/android/happ_chat_app_android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android/happy_chat_app_android.iml" filepath="$PROJECT_DIR$/android/happy_chat_app_android.iml" />
     </modules>
   </component>
 </project>
