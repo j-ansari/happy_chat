@@ -1,4 +1,4 @@
-package com.example.happ_chat_app
+package com.example.happy_chat_app
 
 import io.flutter.embedding.android.FlutterActivity
 
