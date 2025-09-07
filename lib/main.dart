@@ -6,6 +6,7 @@ import 'package:happy_chat_app/src/core/helper/starter.dart';
 import 'package:happy_chat_app/src/core/sl.dart';
 import 'package:happy_chat_app/src/data/repo/auth_repo.dart';
 import 'package:happy_chat_app/src/data/repo/cantact_repo.dart';
+import 'package:happy_chat_app/src/view/app_theme.dart';
 import 'package:happy_chat_app/src/view_model/auth/auth_cubit.dart';
 import 'package:happy_chat_app/src/view_model/contacts/contacts_cubit.dart';
 
@@ -31,7 +32,7 @@ class HappyChatApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(primarySwatch: Colors.blue),
+        theme: AppTheme.lightTheme,
         locale: const Locale('fa', 'IR'),
         supportedLocales: const [Locale('fa', 'IR'), Locale('en', 'US')],
         localizationsDelegates: const [
