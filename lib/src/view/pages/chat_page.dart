@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:happy_chat_app/src/core/constants/app_images.dart';
 import 'package:happy_chat_app/src/core/helper/context_extension.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/sl.dart';
@@ -59,7 +60,35 @@ class _ChatPageState extends State<ChatPage> {
               child: BlocBuilder<ChatCubit, List<Message>>(
                 builder: (context, messages) {
                   if (messages.isEmpty) {
-                    return const Center(child: Text(""));
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      spacing: 8,
+                      children: [
+                        Container(
+                          width: 120,
+                          height: 120,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: AssetImage(AppImages.bg),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'هنوز به این دنیا وارد نشدی.',
+                          style: context.textTheme.titleLarge?.copyWith(
+                            fontSize: 14,
+                          ),
+                        ),
+                        Text(
+                          'یه پورتال بزن به گوشی رفیقت.',
+                          style: context.textTheme.titleLarge?.copyWith(
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    );
                   }
                   return ListView.builder(
                     itemCount: messages.length,
@@ -78,7 +107,9 @@ class _ChatPageState extends State<ChatPage> {
                           ),
                           decoration: BoxDecoration(
                             color:
-                                m.isMine ? Colors.blue : Colors.grey.shade200,
+                                m.isMine
+                                    ? Color(0xfff6beb1)
+                                    : Color(0xfffbdeac),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(m.text),
