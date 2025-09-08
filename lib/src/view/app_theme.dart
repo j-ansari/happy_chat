@@ -53,6 +53,12 @@ class AppTheme {
       bodyLarge: TextStyle(color: color, fontFamily: _vazirM, fontSize: 18),
       bodyMedium: TextStyle(color: color, fontFamily: _vazirM, fontSize: 16),
       bodySmall: TextStyle(color: color, fontFamily: _vazirR, fontSize: 14),
+      labelMedium: TextStyle(
+        color: Colors.grey,
+        fontFamily: _vazirM,
+        fontWeight: FontWeight.w600,
+        fontSize: 12,
+      ),
     );
   }
 }
