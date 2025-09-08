@@ -24,7 +24,7 @@ class AppTheme {
     colorScheme: ColorScheme.dark(
       secondary: Colors.grey[200]!,
       outline: Colors.grey[200],
-      outlineVariant: Colors.black,
+      outlineVariant: Colors.white,
       primary: Colors.white,
       error: Colors.red,
     ),

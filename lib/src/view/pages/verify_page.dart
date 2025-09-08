@@ -19,7 +19,7 @@ class VerifyPage extends StatefulWidget {
 
 class _VerifyPageState extends State<VerifyPage> {
   final key = GlobalKey<FormState>();
-  late OTPInteractor _oTPInteractor;
+  late OTPInteractor oTPInteractor;
   late OTPTextEditController otpController;
 
   @override
@@ -29,7 +29,7 @@ class _VerifyPageState extends State<VerifyPage> {
     otpController = OTPTextEditController(
       codeLength: 4,
       onCodeReceive: (code) {},
-      otpInteractor: _oTPInteractor,
+      otpInteractor: oTPInteractor,
     )..startListenUserConsent((code) {
       if (code != null) {
         otpController.text = code;
@@ -39,22 +39,22 @@ class _VerifyPageState extends State<VerifyPage> {
     });
   }
 
+  @override
+  void dispose() {
+    oTPInteractor.stopListenForCode();
+    otpController.dispose();
+    super.dispose();
+  }
+
   Future<void> _initOtpInteractor() async {
-    _oTPInteractor = OTPInteractor();
-    await _oTPInteractor.getAppSignature();
+    oTPInteractor = OTPInteractor();
+    await oTPInteractor.getAppSignature();
   }
 
   void _verify(String code) {
     if (code.length != 4) return;
     final otp = int.tryParse(code) ?? 0;
     context.read<AuthCubit>().verifyOtp(widget.phone, otp);
-  }
-
-  @override
-  void dispose() {
-    _oTPInteractor.stopListenForCode();
-    otpController.dispose();
-    super.dispose();
   }
 
   @override
