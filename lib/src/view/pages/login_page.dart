@@ -88,15 +88,12 @@ class _LoginPageState extends State<LoginPage> {
                     valueListenable: focusNotifier,
                     builder: (context, hasFocus, _) {
                       return Padding(
-                        padding: const EdgeInsetsDirectional.only(start: 16),
+                        padding: const EdgeInsetsDirectional.only(end: 8),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            SvgPicture.asset(AppImages.flag),
                             Container(
-                              margin: const EdgeInsetsDirectional.only(
-                                start: 8,
-                              ),
+                              margin: const EdgeInsetsDirectional.only(end: 8),
                               height: 35,
                               width: 2,
                               color:
@@ -104,6 +101,7 @@ class _LoginPageState extends State<LoginPage> {
                                       ? context.colorSchema.outlineVariant
                                       : context.colorSchema.outline,
                             ),
+                            SvgPicture.asset(AppImages.flag),
                           ],
                         ),
                       );

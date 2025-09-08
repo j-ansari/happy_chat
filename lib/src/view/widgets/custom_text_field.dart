@@ -6,6 +6,7 @@ class CustomTextField extends StatefulWidget {
   final TextEditingController? controller;
   final String? label;
   final Color? borderColor;
+  final Color? bgColor;
   final int? maxLength;
   final TextInputType? keyboardType;
   final Function(String)? onChanged;
@@ -18,6 +19,7 @@ class CustomTextField extends StatefulWidget {
     this.controller,
     this.label,
     this.borderColor,
+    this.bgColor,
     this.maxLength,
     this.keyboardType,
     this.onChanged,
@@ -55,30 +57,44 @@ class _CustomTextFieldState extends State<CustomTextField> {
     final currentBorderColor =
         _focusNode.hasFocus ? context.colorSchema.outlineVariant : defColor;
 
-    return Directionality(
-      textDirection:
-          widget.prefix == null ? TextDirection.rtl : TextDirection.ltr,
-      child: TextFormField(
-        controller: widget.controller,
-        onChanged: widget.onChanged,
-        maxLength: widget.maxLength,
-        cursorColor: context.colorSchema.outlineVariant,
-        keyboardType: widget.keyboardType,
-        focusNode: _focusNode,
-        validator: widget.validator,
-        decoration: InputDecoration(
-          counter: const SizedBox.shrink(),
-          border: _border(currentBorderColor),
-          enabledBorder: _border(Colors.red),
-          focusedBorder: _border(context.colorSchema.outlineVariant),
-          prefixIcon: widget.prefix,
+    final double leftPadding = widget.prefix != null ? 48 : 12;
+
+    return Stack(
+      children: [
+        TextFormField(
+          controller: widget.controller,
+          onChanged: widget.onChanged,
+          maxLength: widget.maxLength,
+          cursorColor: context.colorSchema.outlineVariant,
+          keyboardType: widget.keyboardType,
+          focusNode: _focusNode,
+          validator: widget.validator,
+          decoration: InputDecoration(
+            counter: const SizedBox.shrink(),
+            labelText: widget.label,
+            labelStyle: context.textTheme.labelMedium,
+            fillColor: widget.bgColor ?? Colors.white,
+            filled: true,
+            contentPadding: EdgeInsets.fromLTRB(leftPadding, 12, 12, 12),
+            enabledBorder: _border(currentBorderColor),
+            errorBorder: _border(context.colorSchema.error),
+            focusedBorder: _border(context.colorSchema.outlineVariant),
+          ),
+          inputFormatters: [
+            if (widget.keyboardType == TextInputType.number ||
+                widget.keyboardType == TextInputType.phone)
+              CustomRegexHandler(regex: RegExp(r'^[0-9]+$')),
+          ],
         ),
-        inputFormatters: [
-          if (widget.keyboardType == TextInputType.number ||
-              widget.keyboardType == TextInputType.phone)
-            CustomRegexHandler(regex: RegExp(r'^[0-9]+$')),
-        ],
-      ),
+
+        if (widget.prefix != null)
+          Positioned(
+            left: 0,
+            top: 0,
+            bottom: 0,
+            child: Center(child: widget.prefix),
+          ),
+      ],
     );
   }
 
