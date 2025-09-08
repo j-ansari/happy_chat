@@ -5,6 +5,7 @@ import 'package:happy_chat_app/src/core/constants/app_images.dart';
 import 'package:happy_chat_app/src/core/constants/app_strings.dart';
 import 'package:happy_chat_app/src/core/helper/context_extension.dart';
 import 'package:happy_chat_app/src/view/pages/verify_page.dart';
+import '../../core/helper/custom_regex_handler.dart';
 import '../../view_model/auth/auth_cubit.dart';
 import '../widgets/widgets.dart';
 
@@ -17,8 +18,22 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final key = GlobalKey<FormState>();
-  final _phoneCtrl = TextEditingController();
+  final phoneController = TextEditingController();
   final focusNotifier = ValueNotifier<bool>(false);
+  final focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    focusNode.addListener(() => focusNotifier.value = focusNode.hasFocus);
+  }
+
+  @override
+  void dispose() {
+    phoneController.dispose();
+    focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +65,6 @@ class _LoginPageState extends State<LoginPage> {
           });
         }
       },
-
       buildWhen: (prev, curr) => prev.isLoading != curr.isLoading,
       builder: (context, state) {
         return BaseWidget(
@@ -70,40 +84,63 @@ class _LoginPageState extends State<LoginPage> {
                   'برای ثبت نام شماره تلفن خود را وارد نمایید.',
                   style: context.textTheme.bodySmall,
                 ),
-                CustomTextField(
-                  controller: _phoneCtrl,
-                  keyboardType: TextInputType.phone,
-                  maxLength: 11,
-                  label: 'شماره تلفن خود را وارد نمایید',
-                  focusNotifier: focusNotifier,
-                  validator: (phone) {
-                    if (phone == null ||
-                        phone.length != 11 ||
-                        !phone.startsWith('09')) {
-                      return 'به نظر می آید شماره تلفن معتبری وارد نکرده اید، مجدداً تلاش کنید';
-                    }
-                    return null;
-                  },
-                  prefix: ValueListenableBuilder<bool>(
+                Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: ValueListenableBuilder(
                     valueListenable: focusNotifier,
                     builder: (context, hasFocus, _) {
-                      return Padding(
-                        padding: const EdgeInsetsDirectional.only(end: 8),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              margin: const EdgeInsetsDirectional.only(end: 8),
-                              height: 35,
-                              width: 2,
-                              color:
-                                  hasFocus
-                                      ? context.colorSchema.outlineVariant
-                                      : context.colorSchema.outline,
+                      return TextFormField(
+                        style: context.textTheme.bodyMedium,
+                        textDirection: TextDirection.rtl,
+                        controller: phoneController,
+                        keyboardType: TextInputType.phone,
+                        maxLength: 11,
+                        focusNode: focusNode,
+                        validator: (phone) {
+                          if (phone == null ||
+                              phone.length != 11 ||
+                              !phone.startsWith('09')) {
+                            return 'به نظر می آید شماره تلفن معتبری وارد نکرده اید\nمجدداً تلاش کنید';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          counter: const SizedBox.shrink(),
+                          alignLabelWithHint: true,
+                          label: Text(
+                            'شماره تلفن خود را وارد نمایید',
+                            style: context.textTheme.labelMedium,
+                          ),
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                          border: _border(context.colorSchema.outline),
+                          errorBorder: _border(context.colorSchema.error),
+                          focusedBorder: _border(
+                            context.colorSchema.outlineVariant,
+                          ),
+                          prefixIcon: Padding(
+                            padding: const EdgeInsetsDirectional.only(start: 8),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SvgPicture.asset(AppImages.flag),
+                                Container(
+                                  margin: const EdgeInsetsDirectional.only(
+                                    start: 8,
+                                  ),
+                                  height: 35,
+                                  width: 2,
+                                  color:
+                                      hasFocus
+                                          ? context.colorSchema.outlineVariant
+                                          : context.colorSchema.outline,
+                                ),
+                              ],
                             ),
-                            SvgPicture.asset(AppImages.flag),
-                          ],
+                          ),
                         ),
+                        inputFormatters: [
+                          CustomRegexHandler(regex: RegExp(r'^[0-9]+$')),
+                        ],
                       );
                     },
                   ),
@@ -116,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
             isLoading: state.isLoading,
             onPressed: () {
               if (!key.currentState!.validate()) return;
-              final phone = _phoneCtrl.text.trim();
+              final phone = phoneController.text.trim();
               context.read<AuthCubit>().sendOtp(phone);
             },
           ),
@@ -124,4 +161,9 @@ class _LoginPageState extends State<LoginPage> {
       },
     );
   }
+
+  OutlineInputBorder _border(Color color) => OutlineInputBorder(
+    borderRadius: BorderRadius.circular(12),
+    borderSide: BorderSide(color: color, width: 1),
+  );
 }
