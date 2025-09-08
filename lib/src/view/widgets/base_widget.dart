@@ -10,6 +10,7 @@ class BaseWidget extends StatelessWidget {
   final bool hasSearch;
   final bool hasAvatar;
   final String? appBarTitle;
+  final double padding;
 
   const BaseWidget({
     super.key,
@@ -19,6 +20,7 @@ class BaseWidget extends StatelessWidget {
     this.hasSearch = false,
     this.hasAvatar = false,
     this.appBarTitle,
+    this.padding = 16,
   });
 
   @override
@@ -73,7 +75,7 @@ class BaseWidget extends StatelessWidget {
                 )
                 : null,
         body: Container(
-          padding: const EdgeInsets.all(16),
+          padding: EdgeInsets.all(padding),
           width: context.screenWidth,
           height: context.screenHeight,
           decoration: BoxDecoration(
@@ -87,7 +89,7 @@ class BaseWidget extends StatelessWidget {
           child: body,
         ),
         floatingActionButton: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: padding),
           child: fab,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
