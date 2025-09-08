@@ -1,20 +1,33 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  static const String _vazirB = "_vazirB";
-  static const String _vazirM = "_vazirM";
-  static const String _vazirR = "_vazirR";
+  static const String _vazirB = "vazirB";
+  static const String _vazirM = "vazirM";
+  static const String _vazirR = "vazirR";
 
   static final ThemeData lightTheme = ThemeData(
     fontFamily: _vazirM,
     brightness: Brightness.light,
-    scaffoldBackgroundColor: Colors.grey[50],
+    colorScheme: ColorScheme.light(
+      secondary: Colors.white,
+      outline: Colors.grey[300],
+      outlineVariant: Colors.black,
+      primary: Colors.black,
+      error: Colors.red,
+    ),
     appBarTheme: const AppBarTheme(backgroundColor: Colors.white, elevation: 0),
     textTheme: _textTheme(Brightness.light),
   );
 
   static final ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
+    colorScheme: ColorScheme.dark(
+      secondary: Colors.grey[200]!,
+      outline: Colors.grey[200],
+      outlineVariant: Colors.black,
+      primary: Colors.white,
+      error: Colors.red,
+    ),
     textTheme: _textTheme(Brightness.dark),
   );
 
@@ -22,7 +35,10 @@ class AppTheme {
     final color = brightness == Brightness.light ? Colors.black : Colors.white;
     return TextTheme(
       titleLarge: TextStyle(
-        color: color,
+        color:
+            brightness == Brightness.light
+                ? const Color(0xff243443)
+                : Colors.white,
         fontFamily: _vazirB,
         fontSize: 24,
         fontWeight: FontWeight.bold,
