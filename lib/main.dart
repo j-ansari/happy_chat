@@ -2,16 +2,19 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:happy_chat_app/src/core/helper/prefs.dart';
 import 'package:happy_chat_app/src/core/helper/starter.dart';
 import 'package:happy_chat_app/src/core/sl.dart';
 import 'package:happy_chat_app/src/data/repo/auth_repo.dart';
-import 'package:happy_chat_app/src/data/repo/cantact_repo.dart';
+import 'package:happy_chat_app/src/data/repo/contact_repo.dart';
 import 'package:happy_chat_app/src/view/app_theme.dart';
 import 'package:happy_chat_app/src/view_model/auth/auth_cubit.dart';
 import 'package:happy_chat_app/src/view_model/contacts/contacts_cubit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  Preferences.preferences = await SharedPreferences.getInstance();
   HttpOverrides.global = MyHttpOverrides();
   await setupDependencies();
   final startWidget = await Starter.decideStartWidget();
@@ -27,8 +30,8 @@ class HappyChatApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => AuthCubit(getIt<AuthRepo>())),
-        BlocProvider(create: (_) => ContactsCubit(getIt<ContactRepo>())),
+        BlocProvider(create: (c) => AuthCubit(getIt<AuthRepo>())),
+        BlocProvider(create: (c) => ContactsCubit(getIt<ContactRepo>())),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
