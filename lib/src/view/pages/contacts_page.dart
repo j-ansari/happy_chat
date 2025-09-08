@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:happy_chat_app/src/core/helper/context_extension.dart';
+import '../../core/constants/app_strings.dart';
 import '../../core/helper/prefs.dart';
 import '../../core/sl.dart';
 import '../../data/repo/chat_repo.dart';
@@ -53,11 +54,14 @@ class ContactsPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(contact.name, style: context.textTheme.titleMedium),
-                    Text('هیچگاه', style: context.textTheme.labelMedium),
+                    Text(
+                      AppStrings.never,
+                      style: context.textTheme.labelMedium,
+                    ),
                   ],
                 ),
                 subtitle: Text(
-                  'هنوز هیچ پیامی ارسال نکرده اید...',
+                  AppStrings.notRegisteredMessage,
                   style: context.textTheme.bodySmall,
                 ),
                 onTap: () async {

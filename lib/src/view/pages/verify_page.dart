@@ -81,7 +81,7 @@ class _VerifyPageState extends State<VerifyPage> {
               ),
               const SizedBox(height: 24),
               Text(
-                'برای ثبت نام کد 4 رقمی ارسال شده را وارد نمایید.',
+                AppStrings.inputCodeTitle,
                 style: context.textTheme.bodySmall,
               ),
               Directionality(
@@ -130,7 +130,7 @@ class _VerifyPageState extends State<VerifyPage> {
                                 context.read<AuthCubit>().sendOtp(widget.phone);
                               },
                       child: const Text(
-                        'ارسال مجدد کد',
+                        AppStrings.resendCode,
                         style: TextStyle(decoration: TextDecoration.underline),
                       ),
                     ),

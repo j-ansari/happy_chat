@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:happy_chat_app/src/core/helper/context_extension.dart';
 import 'package:shamsi_date/shamsi_date.dart';
 import '../../core/constants/app_images.dart';
+import '../../core/constants/app_strings.dart';
 import '../../core/helper/prefs.dart';
 import '../../core/sl.dart';
 import '../../data/model/contact.dart';
@@ -69,13 +70,13 @@ class _ChatPageState extends State<ChatPage> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'هنوز به این دنیا وارد نشدی.',
+                      AppStrings.notEnteredWorld,
                       style: context.textTheme.titleLarge?.copyWith(
                         fontSize: 14,
                       ),
                     ),
                     Text(
-                      'یه پورتال بزن به گوشی رفیقت.',
+                      AppStrings.createPortalForFriend,
                       style: context.textTheme.titleLarge?.copyWith(
                         fontSize: 14,
                       ),
@@ -138,7 +139,7 @@ class _ChatPageState extends State<ChatPage> {
       ),
       fab: CustomTextField(
         controller: _ctrl,
-        label: 'نوشتن پیام...',
+        label: AppStrings.writeMessage,
         borderColor: Colors.transparent,
         bgColor: context.colorSchema.error.withAlpha(20),
         prefix: IconButton(

@@ -74,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 24),
                 Text(
-                  'برای ثبت نام شماره تلفن خود را وارد نمایید.',
+                  AppStrings.registerTitle,
                   style: context.textTheme.bodySmall,
                 ),
                 Directionality(
@@ -95,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                           if (phone == null ||
                               phone.length != 11 ||
                               !phone.startsWith('09')) {
-                            return 'به نظر می آید شماره تلفن معتبری وارد نکرده اید\nمجدداً تلاش کنید';
+                            return AppStrings.invalidNumber;
                           }
                           return null;
                         },
@@ -103,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                           counter: const SizedBox.shrink(),
                           alignLabelWithHint: true,
                           label: Text(
-                            'شماره تلفن خود را وارد نمایید',
+                            AppStrings.inputNumber,
                             style: context.textTheme.labelMedium,
                           ),
                           floatingLabelBehavior: FloatingLabelBehavior.never,
@@ -153,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
           fab: BlocBuilder<AuthCubit, AuthState>(
             builder: (context, state) {
               return CustomButton(
-                title: "ثبت نام",
+                title: AppStrings.register,
                 isLoading: state.isLoading,
                 isDisable: !state.isDisabled,
                 onPressed: () {
