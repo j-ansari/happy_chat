@@ -22,22 +22,22 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  ChatCubit? cubit;
-  final _ctrl = TextEditingController();
+  late ChatCubit cubit;
+  final chatController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     final token = Preferences.getString(PrefsKey.token)!;
     cubit = ChatCubit(getIt<ChatRepo>(), token);
-    cubit?.connectWithContacts(widget.contact.token);
+    cubit.connectWithContacts(widget.contact.token);
     setState(() {});
   }
 
   @override
   void dispose() {
-    cubit?.close();
-    _ctrl.dispose();
+    cubit.close();
+    chatController.dispose();
     super.dispose();
   }
 
@@ -49,7 +49,7 @@ class _ChatPageState extends State<ChatPage> {
       appBarTitle: widget.contact.name,
       padding: 0,
       body: BlocProvider.value(
-        value: cubit!,
+        value: cubit,
         child: BlocBuilder<ChatCubit, List<Message>>(
           builder: (context, messages) {
             if (messages.isEmpty) {
@@ -130,7 +130,7 @@ class _ChatPageState extends State<ChatPage> {
         ),
       ),
       fab: CustomTextField(
-        controller: _ctrl,
+        controller: chatController,
         label: AppStrings.writeMessage,
         borderColor: Colors.transparent,
         bgColor: context.colorSchema.error.withAlpha(20),
@@ -139,9 +139,9 @@ class _ChatPageState extends State<ChatPage> {
           onPressed: () {
             context.read<ChatCubit>().sendMessage(
               widget.contact.token,
-              _ctrl.text.trim(),
+              chatController.text.trim(),
             );
-            _ctrl.clear();
+            chatController.clear();
           },
         ),
       ),
