@@ -1,5 +1,7 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:happy_chat_app/src/core/helper/context_extension.dart';
 import 'package:happy_chat_app/src/view_model/chat/chat_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/sl.dart';
@@ -11,6 +13,16 @@ import 'chat_page.dart';
 class ContactsPage extends StatelessWidget {
   const ContactsPage({super.key});
 
+  Color _getRandomColor() {
+    final random = Random();
+    return Color.fromARGB(
+      255,
+      random.nextInt(256),
+      random.nextInt(256),
+      random.nextInt(256),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<ContactsCubit>();
@@ -20,12 +32,34 @@ class ContactsPage extends StatelessWidget {
       hasAvatar: true,
       body: BlocBuilder<ContactsCubit, List>(
         builder: (context, contacts) {
-          return ListView.builder(
+          return ListView.separated(
             itemCount: contacts.length,
+            separatorBuilder:
+                (c, _) =>
+                    Divider(thickness: 1, color: context.colorSchema.outline),
             itemBuilder: (c, i) {
               final contact = contacts[i];
               return ListTile(
-                title: Text(contact.name),
+                contentPadding: EdgeInsets.zero,
+                leading: Container(
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: _getRandomColor(),
+                  ),
+                ),
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(contact.name, style: context.textTheme.titleMedium),
+                    Text('هیچگاه', style: context.textTheme.labelMedium),
+                  ],
+                ),
+                subtitle: Text(
+                  'هنوز هیچ پیامی ارسال نکرده اید...',
+                  style: context.textTheme.bodySmall,
+                ),
                 onTap: () async {
                   final prefs = await SharedPreferences.getInstance();
                   Navigator.push(
