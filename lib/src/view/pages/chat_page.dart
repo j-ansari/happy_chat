@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:happy_chat_app/src/core/helper/context_extension.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/sl.dart';
 import '../../data/model/contact.dart';
 import '../../data/model/message.dart';
 import '../../data/repo/chat_repo.dart';
 import '../../view_model/chat/chat_cubit.dart';
+import '../widgets/widgets.dart';
 
 class ChatPage extends StatefulWidget {
   final Contact contact;
@@ -46,8 +48,11 @@ class _ChatPageState extends State<ChatPage> {
 
     return BlocProvider.value(
       value: cubit!,
-      child: Scaffold(
-        appBar: AppBar(title: Text(widget.contact.name)),
+      child: BaseWidget(
+        hasAppBar: true,
+        hasAvatar: true,
+        appBarTitle: widget.contact.name,
+        padding: 0,
         body: Column(
           children: [
             Expanded(
@@ -58,31 +63,49 @@ class _ChatPageState extends State<ChatPage> {
                   }
                   return ListView.builder(
                     itemCount: messages.length,
-                    itemBuilder: (c, i) {
-                      final m = messages[i];
-
-                      return ListTile(title: Text(m.text));
+                    itemBuilder: (context, index) {
+                      final m = messages[index];
+                      return Align(
+                        alignment:
+                            m.isMine
+                                ? Alignment.centerLeft
+                                : Alignment.centerRight,
+                        child: Container(
+                          padding: EdgeInsets.all(12),
+                          margin: EdgeInsets.symmetric(
+                            vertical: 4,
+                            horizontal: 8,
+                          ),
+                          decoration: BoxDecoration(
+                            color:
+                                m.isMine ? Colors.blue : Colors.grey.shade200,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(m.text),
+                        ),
+                      );
                     },
                   );
                 },
               ),
             ),
-            Row(
-              children: [
-                Expanded(child: TextField(controller: _ctrl)),
-                IconButton(
-                  icon: Icon(Icons.send),
-                  onPressed: () {
-                    context.read<ChatCubit>().sendMessage(
-                      widget.contact.token,
-                      _ctrl.text.trim(),
-                    );
-                    _ctrl.clear();
-                  },
-                ),
-              ],
-            ),
           ],
+        ),
+        fab: CustomTextField(
+          controller: _ctrl,
+          label: 'نوشتن پیام...',
+          borderColor: Colors.transparent,
+          bgColor: context.colorSchema.error.withAlpha(20),
+          prefix: IconButton(
+            icon: Icon(Icons.send),
+            onPressed: () {
+              context.read<ChatCubit>().sendMessage(
+                widget.contact.token,
+                _ctrl.text.trim(),
+              );
+              _ctrl.clear();
+            },
+          ),
         ),
       ),
     );
