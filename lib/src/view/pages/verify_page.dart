@@ -116,7 +116,10 @@ class _VerifyPageState extends State<VerifyPage> {
                   style: TextStyle(color: context.colorSchema.error),
                 ),
               if (state.timer > 0)
-                Text("ارسال مجدد کد تا ${state.timer} ثانیه دیگر"),
+                Text(
+                  "ارسال مجدد کد تا ${state.timer} ثانیه دیگر",
+                  style: context.textTheme.bodyMedium,
+                ),
               if (state.canResend)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
