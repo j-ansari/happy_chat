@@ -34,7 +34,7 @@ class AuthRepo {
       if (e.response?.statusCode == 401) {
         throw UnauthorizedException('Invalid OTP');
       }
-      throw ApiException('Verify failed');
+      throw ApiException(e.response?.data['message'] ?? '');
     }
   }
 
