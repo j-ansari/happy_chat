@@ -52,7 +52,9 @@ class CustomTextField extends StatelessWidget {
             contentPadding: EdgeInsets.fromLTRB(leftPadding, 12, 12, 12),
             enabledBorder: _border(borderColor ?? context.colorSchema.outline),
             errorBorder: _border(context.colorSchema.error),
-            focusedBorder: _border(context.colorSchema.outlineVariant),
+            focusedBorder: _border(
+              borderColor ?? context.colorSchema.outlineVariant,
+            ),
           ),
           inputFormatters: [
             if (keyboardType == TextInputType.number ||

@@ -50,91 +50,83 @@ class _ChatPageState extends State<ChatPage> {
       padding: 0,
       body: BlocProvider.value(
         value: cubit!,
-        child: Expanded(
-          child: BlocBuilder<ChatCubit, List<Message>>(
-            builder: (context, messages) {
-              if (messages.isEmpty) {
+        child: BlocBuilder<ChatCubit, List<Message>>(
+          builder: (context, messages) {
+            if (messages.isEmpty) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                spacing: 8,
+                children: [
+                  Container(
+                    width: 120,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: AssetImage(AppImages.bg),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    AppStrings.notEnteredWorld,
+                    style: context.textTheme.titleLarge?.copyWith(fontSize: 14),
+                  ),
+                  Text(
+                    AppStrings.createPortalForFriend,
+                    style: context.textTheme.titleLarge?.copyWith(fontSize: 14),
+                  ),
+                ],
+              );
+            }
+            return ListView.builder(
+              itemCount: messages.length,
+              itemBuilder: (context, index) {
+                final showDateHeader = index % 2 == 0;
+                final m = messages[index];
                 return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: 8,
                   children: [
-                    Container(
-                      width: 120,
-                      height: 120,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: AssetImage(AppImages.bg),
+                    if (showDateHeader) ...[
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 16),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 4,
+                          horizontal: 12,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.grey[200],
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Text(
+                          _formatDate(m.timestamp),
+                          style: context.textTheme.bodySmall,
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      AppStrings.notEnteredWorld,
-                      style: context.textTheme.titleLarge?.copyWith(
-                        fontSize: 14,
-                      ),
-                    ),
-                    Text(
-                      AppStrings.createPortalForFriend,
-                      style: context.textTheme.titleLarge?.copyWith(
-                        fontSize: 14,
+                    ],
+                    Align(
+                      alignment:
+                          m.isMine
+                              ? Alignment.centerLeft
+                              : Alignment.centerRight,
+                      child: Container(
+                        padding: const EdgeInsets.all(12),
+                        margin: EdgeInsets.symmetric(
+                          vertical: 4,
+                          horizontal: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color:
+                              m.isMine ? Color(0xfff6beb1) : Color(0xfffbdeac),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(m.text),
                       ),
                     ),
                   ],
                 );
-              }
-              return ListView.builder(
-                itemCount: messages.length,
-                itemBuilder: (context, index) {
-                  final showDateHeader = index % 2 == 0;
-                  final m = messages[index];
-                  return Column(
-                    children: [
-                      if (showDateHeader) ...[
-                        Container(
-                          margin: const EdgeInsets.only(bottom: 16),
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 4,
-                            horizontal: 12,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: Text(
-                            _formatDate(m.timestamp),
-                            style: context.textTheme.bodySmall,
-                          ),
-                        ),
-                      ],
-                      Align(
-                        alignment:
-                            m.isMine
-                                ? Alignment.centerLeft
-                                : Alignment.centerRight,
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          margin: EdgeInsets.symmetric(
-                            vertical: 4,
-                            horizontal: 8,
-                          ),
-                          decoration: BoxDecoration(
-                            color:
-                                m.isMine
-                                    ? Color(0xfff6beb1)
-                                    : Color(0xfffbdeac),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(m.text),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
+              },
+            );
+          },
         ),
       ),
       fab: CustomTextField(
