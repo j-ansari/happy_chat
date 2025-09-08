@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/sl.dart';
 import '../../data/repo/chat_repo.dart';
 import '../../view_model/contacts/contacts_cubit.dart';
+import '../widgets/widgets.dart';
 import 'chat_page.dart';
 
 class ContactsPage extends StatelessWidget {
@@ -14,8 +15,9 @@ class ContactsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final cubit = context.read<ContactsCubit>();
     cubit.load();
-    return Scaffold(
-      appBar: AppBar(title: Text('Contacts')),
+    return BaseWidget(
+      hasSearch: true,
+      hasAvatar: true,
       body: BlocBuilder<ContactsCubit, List>(
         builder: (context, contacts) {
           return ListView.builder(
