@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:happy_chat_app/src/core/constants/app_images.dart';
 import 'package:happy_chat_app/src/core/helper/context_extension.dart';
+import 'package:shamsi_date/shamsi_date.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/sl.dart';
 import '../../data/model/contact.dart';
@@ -43,64 +44,78 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (cubit == null) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    }
-
-    return BlocProvider.value(
-      value: cubit!,
-      child: BaseWidget(
-        hasAppBar: true,
-        hasAvatar: true,
-        appBarTitle: widget.contact.name,
-        padding: 0,
-        body: Column(
-          children: [
-            Expanded(
-              child: BlocBuilder<ChatCubit, List<Message>>(
-                builder: (context, messages) {
-                  if (messages.isEmpty) {
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      spacing: 8,
-                      children: [
+    return BaseWidget(
+      hasAppBar: true,
+      hasAvatar: true,
+      appBarTitle: widget.contact.name,
+      padding: 0,
+      body: BlocProvider.value(
+        value: cubit!,
+        child: Expanded(
+          child: BlocBuilder<ChatCubit, List<Message>>(
+            builder: (context, messages) {
+              if (messages.isEmpty) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: 8,
+                  children: [
+                    Container(
+                      width: 120,
+                      height: 120,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: AssetImage(AppImages.bg),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'هنوز به این دنیا وارد نشدی.',
+                      style: context.textTheme.titleLarge?.copyWith(
+                        fontSize: 14,
+                      ),
+                    ),
+                    Text(
+                      'یه پورتال بزن به گوشی رفیقت.',
+                      style: context.textTheme.titleLarge?.copyWith(
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                );
+              }
+              return ListView.builder(
+                itemCount: messages.length,
+                itemBuilder: (context, index) {
+                  final showDateHeader = index % 2 == 0;
+                  final m = messages[index];
+                  return Column(
+                    children: [
+                      if (showDateHeader) ...[
                         Container(
-                          width: 120,
-                          height: 120,
+                          margin: const EdgeInsets.only(bottom: 16),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 4,
+                            horizontal: 12,
+                          ),
                           decoration: BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage(AppImages.bg),
-                            ),
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(16),
                           ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'هنوز به این دنیا وارد نشدی.',
-                          style: context.textTheme.titleLarge?.copyWith(
-                            fontSize: 14,
-                          ),
-                        ),
-                        Text(
-                          'یه پورتال بزن به گوشی رفیقت.',
-                          style: context.textTheme.titleLarge?.copyWith(
-                            fontSize: 14,
+                          child: Text(
+                            _formatDate(m.timestamp),
+                            style: context.textTheme.bodySmall,
                           ),
                         ),
                       ],
-                    );
-                  }
-                  return ListView.builder(
-                    itemCount: messages.length,
-                    itemBuilder: (context, index) {
-                      final m = messages[index];
-                      return Align(
+                      Align(
                         alignment:
                             m.isMine
                                 ? Alignment.centerLeft
                                 : Alignment.centerRight,
                         child: Container(
-                          padding: EdgeInsets.all(12),
+                          padding: const EdgeInsets.all(12),
                           margin: EdgeInsets.symmetric(
                             vertical: 4,
                             horizontal: 8,
@@ -114,31 +129,36 @@ class _ChatPageState extends State<ChatPage> {
                           ),
                           child: Text(m.text),
                         ),
-                      );
-                    },
+                      ),
+                    ],
                   );
                 },
-              ),
-            ),
-          ],
-        ),
-        fab: CustomTextField(
-          controller: _ctrl,
-          label: 'نوشتن پیام...',
-          borderColor: Colors.transparent,
-          bgColor: context.colorSchema.error.withAlpha(20),
-          prefix: IconButton(
-            icon: Icon(Icons.send),
-            onPressed: () {
-              context.read<ChatCubit>().sendMessage(
-                widget.contact.token,
-                _ctrl.text.trim(),
               );
-              _ctrl.clear();
             },
           ),
         ),
       ),
+      fab: CustomTextField(
+        controller: _ctrl,
+        label: 'نوشتن پیام...',
+        borderColor: Colors.transparent,
+        bgColor: context.colorSchema.error.withAlpha(20),
+        prefix: IconButton(
+          icon: Icon(Icons.send),
+          onPressed: () {
+            context.read<ChatCubit>().sendMessage(
+              widget.contact.token,
+              _ctrl.text.trim(),
+            );
+            _ctrl.clear();
+          },
+        ),
+      ),
     );
+  }
+
+  String _formatDate(DateTime dateTime) {
+    final j = dateTime.toJalali();
+    return "${j.day} ${j.formatter.mN}";
   }
 }
