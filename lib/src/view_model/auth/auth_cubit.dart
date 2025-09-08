@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:happy_chat_app/src/data/data_source/exceptions.dart';
+import '../../data/data_source/exceptions.dart';
 import '../../data/repo/auth_repo.dart';
 
 part 'auth_state.dart';
@@ -12,9 +12,26 @@ class AuthCubit extends Cubit<AuthState> {
 
   AuthCubit(this.repo) : super(const AuthState());
 
+  void setPhoneNumber(String phone) {
+    final isDisabled =
+        phone.isNotEmpty && phone.startsWith('09') && phone.length == 11;
+    emit(
+      state.copyWith(
+        phone: phone,
+        isDisabled: isDisabled,
+        isSuccess: false,
+        isAuthenticated: false,
+        isLoading: false,
+        canResend: false,
+      ),
+    );
+  }
+
   Future<void> sendOtp(String phone) async {
     try {
-      emit(state.copyWith(isLoading: true, errorMessage: null));
+      emit(
+        state.copyWith(isLoading: true, errorMessage: null, isSuccess: false),
+      );
       await repo.sendOtp(phone);
       _startTimer();
       emit(

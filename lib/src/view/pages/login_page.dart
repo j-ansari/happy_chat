@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:happy_chat_app/src/core/constants/app_images.dart';
-import 'package:happy_chat_app/src/core/constants/app_strings.dart';
 import 'package:happy_chat_app/src/core/helper/context_extension.dart';
 import 'package:happy_chat_app/src/view/pages/verify_page.dart';
+import '../../core/constants/app_images.dart';
+import '../../core/constants/app_strings.dart';
 import '../../core/helper/custom_regex_handler.dart';
 import '../../view_model/auth/auth_cubit.dart';
 import '../widgets/widgets.dart';
@@ -41,21 +41,14 @@ class _LoginPageState extends State<LoginPage> {
       listenWhen:
           (prev, curr) =>
               prev.errorMessage != curr.errorMessage ||
-              prev.phone != curr.phone ||
-              prev.isLoading != curr.isLoading,
+              prev.isSuccess != curr.isSuccess,
       listener: (context, state) {
-        if (state.errorMessage != null) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.errorMessage!)));
-        }
-
         if (state.phone != null &&
             !state.isLoading &&
             state.errorMessage == null) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (mounted) {
-              Navigator.pushReplacement(
+              Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (_) => VerifyPage(phone: state.phone!),
@@ -96,6 +89,8 @@ class _LoginPageState extends State<LoginPage> {
                         keyboardType: TextInputType.phone,
                         maxLength: 11,
                         focusNode: focusNode,
+                        onChanged:
+                            (v) => context.read<AuthCubit>().setPhoneNumber(v),
                         validator: (phone) {
                           if (phone == null ||
                               phone.length != 11 ||
@@ -145,16 +140,28 @@ class _LoginPageState extends State<LoginPage> {
                     },
                   ),
                 ),
+                if (state.errorMessage != null)
+                  Text(
+                    state.errorMessage!,
+                    style: context.textTheme.bodyMedium?.copyWith(
+                      color: context.colorSchema.error,
+                    ),
+                  ),
               ],
             ),
           ),
-          fab: CustomButton(
-            title: state.isLoading ? "در حال ارسال..." : "ثبت نام",
-            isLoading: state.isLoading,
-            onPressed: () {
-              if (!key.currentState!.validate()) return;
-              final phone = phoneController.text.trim();
-              context.read<AuthCubit>().sendOtp(phone);
+          fab: BlocBuilder<AuthCubit, AuthState>(
+            builder: (context, state) {
+              return CustomButton(
+                title: "ثبت نام",
+                isLoading: state.isLoading,
+                isDisable: !state.isDisabled,
+                onPressed: () {
+                  if (!key.currentState!.validate()) return;
+                  final phone = phoneController.text.trim();
+                  context.read<AuthCubit>().sendOtp(phone);
+                },
+              );
             },
           ),
         );
