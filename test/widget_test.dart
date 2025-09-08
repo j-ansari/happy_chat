@@ -1,30 +1,32 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:happy_chat_app/src/data/data_source/api_service.dart';
+import 'package:happy_chat_app/src/data/repo/auth_repo.dart';
+import 'package:mockito/mockito.dart';
 
-import 'package:happy_chat_app/main.dart';
+class MockApi extends Mock implements ApiService {}
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  group('AuthRepo', () {
+    late MockApi api;
+    late AuthRepo repo;
+    setUp(() {
+      api = MockApi();
+      repo = AuthRepo(api);
+    });
+    test('sendOtp calls API', () async {
+      when(api.dio.post('/api/v1/send-otp', data: anyNamed('data'))).thenAnswer(
+        (_) async => Response(
+          requestOptions: RequestOptions(path: ''),
+          statusCode: 200,
+          data: {},
+        ),
+      );
+      await repo.sendOtp('09363211109');
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+      verify(
+        api.dio.post('/api/v1/send-otp', data: anyNamed('data')),
+      ).called(1);
+    });
   });
 }
