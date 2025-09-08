@@ -27,20 +27,22 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialButton(
+    return ElevatedButton(
       onPressed: isLoading || isDisable ? null : onPressed,
-      minWidth: width,
-      height: height,
-      color:
-          isDisable
-              ? (color != null
-                  ? color?.withOpacity(0.2)
-                  : context.colorSchema.primary.withOpacity(0.2))
-              : color ?? context.colorSchema.primary,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(borderRadius),
+      style: ElevatedButton.styleFrom(
+        minimumSize: Size(width, height),
+        maximumSize: Size(width, height),
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(borderRadius),
+        ),
+        backgroundColor:
+            isDisable || isLoading
+                ? (color != null
+                    ? color?.withOpacity(0.2)
+                    : context.colorSchema.primary.withOpacity(0.6))
+                : color ?? context.colorSchema.primary,
       ),
-      elevation: 0,
       child:
           icon == null
               ? handleTitle(context)
