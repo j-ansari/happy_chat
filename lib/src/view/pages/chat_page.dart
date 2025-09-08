@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:happy_chat_app/src/core/constants/app_images.dart';
 import 'package:happy_chat_app/src/core/helper/context_extension.dart';
 import 'package:shamsi_date/shamsi_date.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../../core/constants/app_images.dart';
+import '../../core/helper/prefs.dart';
 import '../../core/sl.dart';
 import '../../data/model/contact.dart';
 import '../../data/model/message.dart';
@@ -27,12 +27,10 @@ class _ChatPageState extends State<ChatPage> {
   @override
   void initState() {
     super.initState();
-    SharedPreferences.getInstance().then((prefs) {
-      final token = prefs.getString('token')!;
-      cubit = ChatCubit(getIt<ChatRepo>(), token);
-      cubit?.connectWithContacts(widget.contact.token);
-      setState(() {});
-    });
+    final token = Preferences.getString(PrefsKey.token)!;
+    cubit = ChatCubit(getIt<ChatRepo>(), token);
+    cubit?.connectWithContacts(widget.contact.token);
+    setState(() {});
   }
 
   @override

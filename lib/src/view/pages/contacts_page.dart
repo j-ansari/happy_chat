@@ -2,10 +2,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:happy_chat_app/src/core/helper/context_extension.dart';
-import 'package:happy_chat_app/src/view_model/chat/chat_cubit.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../../core/helper/prefs.dart';
 import '../../core/sl.dart';
 import '../../data/repo/chat_repo.dart';
+import '../../view_model/chat/chat_cubit.dart';
 import '../../view_model/contacts/contacts_cubit.dart';
 import '../widgets/widgets.dart';
 import 'chat_page.dart';
@@ -61,17 +61,13 @@ class ContactsPage extends StatelessWidget {
                   style: context.textTheme.bodySmall,
                 ),
                 onTap: () async {
-                  final prefs = await SharedPreferences.getInstance();
+                  final token = Preferences.getString(PrefsKey.token);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder:
-                          (_) => BlocProvider(
-                            create:
-                                (context) => ChatCubit(
-                                  getIt<ChatRepo>(),
-                                  prefs.getString('token')!,
-                                ),
+                          (c) => BlocProvider(
+                            create: (c) => ChatCubit(getIt<ChatRepo>(), token!),
                             child: ChatPage(contact: contact),
                           ),
                     ),

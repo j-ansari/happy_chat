@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../../core/helper/prefs.dart';
 import '../data_source/api_service.dart';
 import '../data_source/exceptions.dart';
 import '../model/auth.dart';
@@ -16,7 +16,7 @@ class AuthRepo {
         data: SendOtpRequestDto(phone).toJson(),
       );
     } on DioException catch (e) {
-      throw ApiException('Failed to send OTP');
+      throw ApiException("${e.response?.data['message'] ?? ''}");
     }
   }
 
@@ -27,8 +27,7 @@ class AuthRepo {
         data: VerifyOtpRequestDto(phone: phone, otp: otp).toJson(),
       );
       final dto = AuthResponseDto.fromJson(resp.data as Map<String, dynamic>);
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('token', dto.token);
+      await Preferences.setString(PrefsKey.token, dto.token);
       return dto.token;
     } on DioException catch (e) {
       if (e.response?.statusCode == 401) {
@@ -39,7 +38,6 @@ class AuthRepo {
   }
 
   Future<void> logout() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove('token');
+    await Preferences.remove(PrefsKey.token);
   }
 }

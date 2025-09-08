@@ -16,7 +16,8 @@ class ContactDto {
 
 class ContactsItem {
   final String name;
-  final String token; // used to build topic
+  final String token;
+
   ContactsItem({required this.name, required this.token});
 
   factory ContactsItem.fromJson(Map<String, dynamic> json) =>
