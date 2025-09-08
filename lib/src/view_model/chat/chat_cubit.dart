@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:convert';
@@ -19,6 +20,7 @@ class ChatCubit extends Cubit<List<Message>> {
           to: dto.to,
           text: dto.message,
           timestamp: DateTime.parse(dto.timestamp),
+          isMine: dto.from == myToken,
         );
         emit(List.from(state)..add(m));
       } catch (_) {}
@@ -48,6 +50,7 @@ class ChatCubit extends Cubit<List<Message>> {
           to: dto.to,
           text: dto.message,
           timestamp: DateTime.parse(dto.timestamp),
+          isMine: dto.from == contactToken,
         );
 
         emit(List.from(state)..add(msg));
@@ -74,6 +77,7 @@ class ChatCubit extends Cubit<List<Message>> {
       to: contactToken,
       text: text,
       timestamp: DateTime.now(),
+      isMine: true,
     );
     emit(List.from(state)..add(m));
   }
