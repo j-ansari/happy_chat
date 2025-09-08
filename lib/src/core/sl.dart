@@ -1,9 +1,8 @@
 import 'package:get_it/get_it.dart';
-
 import '../data/data_source/api_service.dart';
 import '../data/data_source/mqtt_client.dart';
 import '../data/repo/auth_repo.dart';
-import '../data/repo/cantact_repo.dart';
+import '../data/repo/contact_repo.dart';
 import '../data/repo/chat_repo.dart';
 
 final getIt = GetIt.instance;

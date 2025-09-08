@@ -1,7 +1,6 @@
-import 'dart:async';
 import 'package:dio/dio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/constants/app_strings.dart';
+import '../../core/helper/prefs.dart';
 import 'exceptions.dart';
 
 class ApiService {
@@ -19,8 +18,7 @@ class ApiService {
     dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          final prefs = await SharedPreferences.getInstance();
-          final token = prefs.getString('token');
+          final token = Preferences.getString(PrefsKey.token);
           if (token != null) {
             options.headers['Authorization'] = 'Bearer $token';
           }
