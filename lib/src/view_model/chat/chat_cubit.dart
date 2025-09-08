@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:convert';
-import '../../data/model/message.dart';
-import '../../data/model/messages.dart';
+import '../../data/dto/message.dart';
+import '../../data/dto/messages.dart';
 import '../../data/repo/chat_repo.dart';
 
 class ChatCubit extends Cubit<List<Message>> {

@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import '../../core/helper/prefs.dart';
 import '../data_source/api_service.dart';
 import '../data_source/exceptions.dart';
-import '../model/auth.dart';
+import '../dto/auth.dart';
 
 class AuthRepo {
   final ApiService api;

@@ -1,6 +1,6 @@
 import '../data_source/api_service.dart';
-import '../model/contact.dart';
-import '../model/contacts.dart';
+import '../dto/contact.dart';
+import '../dto/contacts.dart';
 
 class ContactRepo {
   final ApiService api;

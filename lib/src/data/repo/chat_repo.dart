@@ -1,6 +1,6 @@
 import 'dart:convert';
 import '../data_source/mqtt_client.dart';
-import '../model/messages.dart';
+import '../dto/messages.dart';
 
 class ChatRepo {
   final MqttService mqtt;
