@@ -62,7 +62,7 @@ class MqttService {
       await connect();
     }
     final builder = MqttClientPayloadBuilder();
-    builder.addString(payload);
+    builder.addUTF8String(payload);
     _client.publishMessage(topic, MqttQos.atLeastOnce, builder.payload!);
   }
 
