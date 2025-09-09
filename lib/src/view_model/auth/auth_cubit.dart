@@ -35,7 +35,7 @@ class AuthCubit extends Cubit<AuthState> {
     final phoneNumber = ConvertNumber.normalizeDigits(phone);
     try {
       emit(
-        state.copyWith(isLoading: true, errorMessage: null, isSuccess: false),
+        state.copyWith(isLoading: true, sendOtpError: null, isSuccess: false),
       );
       await repo.sendOtp(phoneNumber);
       _startTimer();
@@ -50,19 +50,19 @@ class AuthCubit extends Cubit<AuthState> {
         ),
       );
     } catch (e) {
-      emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
+      emit(state.copyWith(isLoading: false, sendOtpError: e.toString()));
     }
   }
 
   Future<void> verifyOtp(String phone, int otp) async {
     final phoneNumber = ConvertNumber.normalizeDigits(phone);
     try {
-      emit(state.copyWith(isLoading: true, errorMessage: null));
+      emit(state.copyWith(isLoading: true, verifyOtpError: null));
       final token = await repo.verifyOtp(phoneNumber, otp);
       emit(state.copyWith(isLoading: false, isSuccess: true, token: token));
     } catch (e) {
       e as ApiException;
-      emit(state.copyWith(isLoading: false, errorMessage: e.message));
+      emit(state.copyWith(isLoading: false, verifyOtpError: e.message));
     }
   }
 

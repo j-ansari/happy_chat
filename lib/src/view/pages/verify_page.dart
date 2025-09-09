@@ -80,9 +80,9 @@ class _VerifyPageState extends State<VerifyPage> {
                   },
                 ),
               ),
-              if (state.errorMessage != null)
+              if (state.verifyOtpError != null)
                 Text(
-                  state.errorMessage!,
+                  state.verifyOtpError!,
                   style: TextStyle(color: context.colorSchema.error),
                 ),
               if (state.timer > 0)

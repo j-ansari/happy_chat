@@ -5,7 +5,8 @@ class AuthState extends Equatable {
   final bool isDisabled;
   final bool isSuccess;
   final bool isAuthenticated;
-  final String? errorMessage;
+  final String? sendOtpError;
+  final String? verifyOtpError;
   final int timer;
   final bool canResend;
   final String? phone;
@@ -16,7 +17,8 @@ class AuthState extends Equatable {
     this.isDisabled = false,
     this.isSuccess = false,
     this.isAuthenticated = false,
-    this.errorMessage,
+    this.sendOtpError,
+    this.verifyOtpError,
     this.timer = 0,
     this.canResend = false,
     this.phone,
@@ -28,7 +30,8 @@ class AuthState extends Equatable {
     bool? isDisabled,
     bool? isSuccess,
     bool? isAuthenticated,
-    String? errorMessage,
+    String? sendOtpError,
+    String? verifyOtpError,
     int? timer,
     bool? canResend,
     String? phone,
@@ -38,8 +41,9 @@ class AuthState extends Equatable {
       isLoading: isLoading ?? this.isLoading,
       isDisabled: isDisabled ?? this.isDisabled,
       isSuccess: isSuccess ?? this.isSuccess,
-      isAuthenticated: isSuccess ?? this.isAuthenticated,
-      errorMessage: errorMessage,
+      isAuthenticated: isAuthenticated ?? this.isAuthenticated,
+      sendOtpError: sendOtpError ?? this.sendOtpError,
+      verifyOtpError: verifyOtpError ?? this.verifyOtpError,
       timer: timer ?? this.timer,
       canResend: canResend ?? this.canResend,
       phone: phone ?? this.phone,
@@ -53,7 +57,8 @@ class AuthState extends Equatable {
     isDisabled,
     isSuccess,
     isAuthenticated,
-    errorMessage,
+    sendOtpError,
+    verifyOtpError,
     timer,
     canResend,
     phone,

@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:happy_chat_app/src/core/helper/context_extension.dart';
-import 'package:happy_chat_app/src/view/pages/verify_page.dart';
 import '../../core/constants/app_images.dart';
 import '../../core/constants/app_strings.dart';
 import '../../core/helper/convert_number.dart';
 import '../../core/helper/custom_regex_handler.dart';
 import '../../view_model/auth/auth_cubit.dart';
 import '../widgets/widgets.dart';
+import 'verify_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -22,10 +22,12 @@ class _LoginPageState extends State<LoginPage> {
   final phoneController = TextEditingController();
   final focusNotifier = ValueNotifier<bool>(false);
   final focusNode = FocusNode();
+  late AuthCubit cubit;
 
   @override
   void initState() {
     super.initState();
+    cubit = context.read<AuthCubit>();
     focusNode.addListener(() => focusNotifier.value = focusNode.hasFocus);
   }
 
@@ -39,23 +41,23 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AuthCubit, AuthState>(
-      listenWhen:
-          (prev, curr) =>
-              prev.errorMessage != curr.errorMessage ||
-              prev.isSuccess != curr.isSuccess,
+      listenWhen: (prev, curr) => prev.isSuccess != curr.isSuccess,
       listener: (context, state) {
-        if (state.phone != null &&
+        if (state.isSuccess &&
+            state.phone != null &&
             !state.isLoading &&
-            state.errorMessage == null) {
+            state.sendOtpError == null) {
+          final isCurrent = ModalRoute.of(context)?.isCurrent ?? false;
+          if (!isCurrent) return;
+
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (mounted) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => VerifyPage(phone: state.phone!),
-                ),
-              );
-            }
+            if (!mounted) return;
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => VerifyPage(phone: state.phone!),
+              ),
+            );
           });
         }
       },
@@ -144,9 +146,9 @@ class _LoginPageState extends State<LoginPage> {
                     },
                   ),
                 ),
-                if (state.errorMessage != null)
+                if (state.sendOtpError != null)
                   Text(
-                    state.errorMessage!,
+                    state.sendOtpError!,
                     style: context.textTheme.bodyMedium?.copyWith(
                       color: context.colorSchema.error,
                     ),
