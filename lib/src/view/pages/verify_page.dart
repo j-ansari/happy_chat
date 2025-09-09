@@ -4,6 +4,7 @@ import 'package:happy_chat_app/src/core/helper/context_extension.dart';
 import 'package:otp_autofill/otp_autofill.dart';
 import 'package:pinput/pinput.dart';
 import '../../core/constants/app_strings.dart';
+import '../../core/helper/convert_number.dart';
 import '../../view_model/auth/auth_cubit.dart';
 import '../widgets/widgets.dart';
 import 'contacts_page.dart';
@@ -51,7 +52,8 @@ class _VerifyPageState extends State<VerifyPage> {
     await oTPInteractor.getAppSignature();
   }
 
-  void _verify(String code) {
+  void _verify(String c) {
+    final code = ConvertNumber.normalizeDigits(c);
     if (code.length != 4) return;
     final otp = int.tryParse(code) ?? 0;
     context.read<AuthCubit>().verifyOtp(widget.phone, otp);

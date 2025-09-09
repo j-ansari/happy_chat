@@ -5,6 +5,7 @@ import 'package:happy_chat_app/src/core/helper/context_extension.dart';
 import 'package:happy_chat_app/src/view/pages/verify_page.dart';
 import '../../core/constants/app_images.dart';
 import '../../core/constants/app_strings.dart';
+import '../../core/helper/convert_number.dart';
 import '../../core/helper/custom_regex_handler.dart';
 import '../../view_model/auth/auth_cubit.dart';
 import '../widgets/widgets.dart';
@@ -91,10 +92,9 @@ class _LoginPageState extends State<LoginPage> {
                         focusNode: focusNode,
                         onChanged:
                             (v) => context.read<AuthCubit>().setPhoneNumber(v),
-                        validator: (phone) {
-                          if (phone == null ||
-                              phone.length != 11 ||
-                              !phone.startsWith('09')) {
+                        validator: (ph) {
+                          final phone = ConvertNumber.normalizeDigits(ph!);
+                          if (phone.length != 11 || !phone.startsWith('09')) {
                             return AppStrings.invalidNumber;
                           }
                           return null;
@@ -134,7 +134,11 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         inputFormatters: [
-                          CustomRegexHandler(regex: RegExp(r'^[0-9]+$')),
+                          CustomRegexHandler(
+                            regex: RegExp(
+                              r'^[0-9\u06F0-\u06F9\u0660-\u0669]+$',
+                            ),
+                          ),
                         ],
                       );
                     },
