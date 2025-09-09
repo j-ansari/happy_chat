@@ -60,6 +60,7 @@ class _VerifyPageState extends State<VerifyPage> {
                   length: 4,
                   keyboardType: TextInputType.number,
                   defaultPinTheme: PinTheme(
+                    textStyle: context.textTheme.labelLarge,
                     height: 60,
                     width: 60,
                     margin: const EdgeInsets.symmetric(horizontal: 8),

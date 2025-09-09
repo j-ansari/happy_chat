@@ -10,7 +10,6 @@ class CustomButton extends StatelessWidget {
   final double height;
   final double borderRadius;
   final IconData? icon;
-  final Color? color;
 
   const CustomButton({
     super.key,
@@ -22,7 +21,6 @@ class CustomButton extends StatelessWidget {
     this.height = 50,
     this.borderRadius = 12,
     this.icon,
-    this.color,
   });
 
   @override
@@ -38,10 +36,8 @@ class CustomButton extends StatelessWidget {
         ),
         backgroundColor:
             isDisable || isLoading
-                ? (color != null
-                    ? color?.withOpacity(0.2)
-                    : context.colorSchema.primary.withOpacity(0.6))
-                : color ?? context.colorSchema.primary,
+                ? context.colorSchema.onSurface
+                : context.colorSchema.onPrimary,
       ),
       child:
           icon == null
@@ -58,10 +54,7 @@ class CustomButton extends StatelessWidget {
 
   Widget handleTitle(BuildContext context) {
     return !isLoading
-        ? Text(
-          title,
-          style: context.textTheme.titleMedium?.copyWith(color: Colors.white),
-        )
+        ? Text(title, style: context.textTheme.labelLarge)
         : const CircularProgressIndicator(color: Colors.white);
   }
 }

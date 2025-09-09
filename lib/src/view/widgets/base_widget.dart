@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:happy_chat_app/src/core/constants/app_images.dart';
 import 'package:happy_chat_app/src/core/helper/context_extension.dart';
+import '../../core/constants/app_images.dart';
 
 class BaseWidget extends StatelessWidget {
   final Widget body;
@@ -83,7 +83,11 @@ class BaseWidget extends StatelessWidget {
         height: context.screenHeight,
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: const [Colors.white, Colors.white, Color(0xfffcedea)],
+            colors: [
+              context.colorSchema.background,
+              context.colorSchema.background,
+              context.colorSchema.onBackground,
+            ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             stops: [0.0, 0.2, 1],

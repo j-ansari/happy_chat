@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:happy_chat_app/src/core/helper/context_extension.dart';
+import 'package:happy_chat_app/src/view_model/change_theme.dart';
 import '../../core/constants/app_strings.dart';
 import '../../core/helper/prefs.dart';
 import '../../core/sl.dart';
@@ -84,19 +85,76 @@ class ContactsPage extends StatelessWidget {
           );
         },
       ),
-      fab: CustomButton(
-        title: AppStrings.exit,
-        width: 100,
-        onPressed: () async {
-          await context.read<AuthCubit>().logout().then(
-            (_) => Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (c) => LoginPage()),
-              (_) => false,
-            ),
-          );
-        },
+      fab: Row(
+        children: [
+          CustomButton(
+            title: AppStrings.exit,
+            width: 100,
+            onPressed: () async {
+              await context.read<AuthCubit>().logout().then(
+                (_) => Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (c) => LoginPage()),
+                  (_) => false,
+                ),
+              );
+            },
+          ),
+          button(context),
+        ],
       ),
+    );
+  }
+
+  Widget button(BuildContext context) {
+    return BlocBuilder<ThemeCubit, ThemeMode>(
+      builder: (context, themeMode) {
+        final isDark = themeMode == ThemeMode.dark;
+        final c = context.read<ThemeCubit>();
+
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          width: 120,
+          height: 50,
+          padding: const EdgeInsets.all(6),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(30),
+            color: Colors.red,
+          ),
+          child: Stack(
+            children: [
+              AnimatedAlign(
+                duration: const Duration(milliseconds: 300),
+                alignment:
+                    isDark ? Alignment.centerLeft : Alignment.centerRight,
+                child: GestureDetector(
+                  onTap: () => c.toggle(),
+                  child: Container(
+                    width: 38,
+                    height: 38,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 6,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      isDark ? Icons.nightlight_round : Icons.wb_sunny,
+                      color: isDark ? Colors.deepPurple : Colors.orange,
+                      size: 20,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
