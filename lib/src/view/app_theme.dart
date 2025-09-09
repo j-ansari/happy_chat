@@ -60,7 +60,7 @@ class AppTheme {
       bodyMedium: TextStyle(color: color, fontFamily: _vazirM, fontSize: 16),
       bodySmall: TextStyle(color: color, fontFamily: _vazirR, fontSize: 14),
       labelLarge: TextStyle(
-        color: Colors.black,
+        color: isLight ? Colors.white : Colors.black,
         fontFamily: _vazirM,
         fontWeight: FontWeight.w600,
         fontSize: 18,
@@ -75,7 +75,7 @@ class AppTheme {
         color: Colors.black,
         fontFamily: _vazirM,
         fontWeight: FontWeight.w600,
-        fontSize: 12,
+        fontSize: 18,
       ),
     );
   }

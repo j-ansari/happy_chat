@@ -136,7 +136,7 @@ class _ChatPageState extends State<ChatPage> {
         bgColor: context.colorSchema.error.withAlpha(20),
         maxLines: 3,
         prefix: IconButton(
-          icon: Icon(Icons.send),
+          icon: const Icon(Icons.send, color: Colors.black),
           onPressed: () {
             context.read<ChatCubit>().sendMessage(
               widget.contact.token,
