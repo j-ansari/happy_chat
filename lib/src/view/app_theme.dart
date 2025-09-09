@@ -9,11 +9,15 @@ class AppTheme {
     fontFamily: _vazirM,
     brightness: Brightness.light,
     colorScheme: ColorScheme.light(
+      background: Colors.white,
+      onBackground: Color(0xfffcedea),
+      primary: Colors.black,
+      onPrimary: Colors.black,
       secondary: Colors.white,
       outline: Colors.grey[300],
       outlineVariant: Colors.black,
-      primary: Colors.black,
       error: Colors.red,
+      onSurface: Colors.black.withAlpha(30),
     ),
     appBarTheme: const AppBarTheme(backgroundColor: Colors.white, elevation: 0),
     textTheme: _textTheme(Brightness.light),
@@ -22,23 +26,25 @@ class AppTheme {
   static final ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
     colorScheme: ColorScheme.dark(
+      background: Colors.black,
+      onBackground: Colors.red.shade100,
+      primary: Colors.white,
+      onPrimary: Colors.grey,
       secondary: Colors.grey[200]!,
       outline: Colors.grey[200],
       outlineVariant: Colors.white,
-      primary: Colors.white,
       error: Colors.red,
+      onSurface: Colors.black.withAlpha(60),
     ),
     textTheme: _textTheme(Brightness.dark),
   );
 
   static TextTheme _textTheme(Brightness brightness) {
-    final color = brightness == Brightness.light ? Colors.black : Colors.white;
+    final isLight = brightness == Brightness.light;
+    final color = isLight ? Colors.black : Colors.white;
     return TextTheme(
       titleLarge: TextStyle(
-        color:
-            brightness == Brightness.light
-                ? const Color(0xff243443)
-                : Colors.white,
+        color: isLight ? const Color(0xff243443) : Colors.white,
         fontFamily: _vazirB,
         fontSize: 24,
         fontWeight: FontWeight.bold,
@@ -53,8 +59,20 @@ class AppTheme {
       bodyLarge: TextStyle(color: color, fontFamily: _vazirM, fontSize: 18),
       bodyMedium: TextStyle(color: color, fontFamily: _vazirM, fontSize: 16),
       bodySmall: TextStyle(color: color, fontFamily: _vazirR, fontSize: 14),
+      labelLarge: TextStyle(
+        color: Colors.black,
+        fontFamily: _vazirM,
+        fontWeight: FontWeight.w600,
+        fontSize: 18,
+      ),
       labelMedium: TextStyle(
         color: Colors.grey,
+        fontFamily: _vazirM,
+        fontWeight: FontWeight.w600,
+        fontSize: 12,
+      ),
+      labelSmall: TextStyle(
+        color: Colors.black,
         fontFamily: _vazirM,
         fontWeight: FontWeight.w600,
         fontSize: 12,
