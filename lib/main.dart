@@ -9,6 +9,7 @@ import 'package:happy_chat_app/src/data/repo/auth_repo.dart';
 import 'package:happy_chat_app/src/data/repo/contact_repo.dart';
 import 'package:happy_chat_app/src/view/app_theme.dart';
 import 'package:happy_chat_app/src/view_model/auth/auth_cubit.dart';
+import 'package:happy_chat_app/src/view_model/change_theme.dart';
 import 'package:happy_chat_app/src/view_model/contacts/contacts_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,7 +19,9 @@ void main() async {
   HttpOverrides.global = MyHttpOverrides();
   await setupDependencies();
   final startWidget = await Starter.decideStartWidget();
-  runApp(HappyChatApp(startWidget));
+  runApp(
+    BlocProvider(create: (c) => ThemeCubit(), child: HappyChatApp(startWidget)),
+  );
 }
 
 class HappyChatApp extends StatelessWidget {
@@ -33,17 +36,23 @@ class HappyChatApp extends StatelessWidget {
         BlocProvider(create: (c) => AuthCubit(getIt<AuthRepo>())),
         BlocProvider(create: (c) => ContactsCubit(getIt<ContactRepo>())),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme,
-        locale: const Locale('fa', 'IR'),
-        supportedLocales: const [Locale('fa', 'IR'), Locale('en', 'US')],
-        localizationsDelegates: const [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        home: start,
+      child: BlocBuilder<ThemeCubit, ThemeMode>(
+        builder: (context, themeMode) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            themeMode: themeMode,
+            locale: const Locale('fa', 'IR'),
+            supportedLocales: const [Locale('fa', 'IR'), Locale('en', 'US')],
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            home: start,
+          );
+        },
       ),
     );
   }
