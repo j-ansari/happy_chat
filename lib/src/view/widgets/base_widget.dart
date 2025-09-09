@@ -12,6 +12,7 @@ class BaseWidget extends StatelessWidget {
   final bool hasAvatar;
   final String? appBarTitle;
   final double padding;
+  final Widget? moreWidget;
 
   const BaseWidget({
     super.key,
@@ -22,6 +23,7 @@ class BaseWidget extends StatelessWidget {
     this.hasAvatar = false,
     this.appBarTitle,
     this.padding = 16,
+    this.moreWidget,
   });
 
   @override
@@ -73,6 +75,11 @@ class BaseWidget extends StatelessWidget {
                       Icon(Icons.person_pin, size: 44, color: Colors.grey[600])
                     else
                       const SizedBox(width: 44),
+                    if (moreWidget != null)
+                      Padding(
+                        padding: const EdgeInsetsDirectional.only(start: 8),
+                        child: moreWidget!,
+                      ),
                   ],
                 ),
               )
