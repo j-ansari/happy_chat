@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../core/helper/prefs.dart';
-import '../view/app_theme.dart';
 
 class ThemeCubit extends Cubit<ThemeMode> {
   ThemeCubit() : super(ThemeMode.light) {
@@ -21,16 +20,10 @@ class ThemeCubit extends Cubit<ThemeMode> {
     }
   }
 
-  Future<void> toggle() async {
+  Future<void> changeTheme() async {
     final newMode = state == ThemeMode.dark ? ThemeMode.light : ThemeMode.dark;
     emit(newMode);
     await _saveToPrefs(newMode == ThemeMode.dark);
-  }
-
-  Future<void> setDark(bool isDark) async {
-    final newMode = isDark ? ThemeMode.dark : ThemeMode.light;
-    emit(newMode);
-    await _saveToPrefs(isDark);
   }
 
   Future<void> _saveToPrefs(bool isDark) async {
@@ -39,9 +32,5 @@ class ThemeCubit extends Cubit<ThemeMode> {
     } catch (e) {
       debugPrint('ThemeCubit: failed to save prefs: $e');
     }
-  }
-
-  ThemeData get currentTheme {
-    return state == ThemeMode.dark ? AppTheme.darkTheme : AppTheme.lightTheme;
   }
 }

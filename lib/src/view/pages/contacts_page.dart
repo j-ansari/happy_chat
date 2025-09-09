@@ -2,12 +2,12 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:happy_chat_app/src/core/helper/context_extension.dart';
-import 'package:happy_chat_app/src/view_model/change_theme.dart';
 import '../../core/constants/app_strings.dart';
 import '../../core/helper/prefs.dart';
 import '../../core/sl.dart';
 import '../../data/repo/chat_repo.dart';
 import '../../view_model/auth/auth_cubit.dart';
+import '../../view_model/change_theme.dart';
 import '../../view_model/chat/chat_cubit.dart';
 import '../../view_model/contacts/contacts_cubit.dart';
 import '../widgets/widgets.dart';
@@ -34,6 +34,7 @@ class ContactsPage extends StatelessWidget {
     return BaseWidget(
       hasSearch: true,
       hasAvatar: true,
+      moreWidget: changeTheme(context),
       body: BlocBuilder<ContactsCubit, List>(
         builder: (context, contacts) {
           return ListView.separated(
@@ -85,28 +86,26 @@ class ContactsPage extends StatelessWidget {
           );
         },
       ),
-      fab: Row(
-        children: [
-          CustomButton(
-            title: AppStrings.exit,
-            width: 100,
-            onPressed: () async {
-              await context.read<AuthCubit>().logout().then(
-                (_) => Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (c) => LoginPage()),
-                  (_) => false,
-                ),
-              );
-            },
-          ),
-          button(context),
-        ],
+      fab: Align(
+        alignment: Alignment.bottomLeft,
+        child: CustomButton(
+          title: AppStrings.exit,
+          width: 100,
+          onPressed: () async {
+            await context.read<AuthCubit>().logout().then(
+              (_) => Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (c) => LoginPage()),
+                (_) => false,
+              ),
+            );
+          },
+        ),
       ),
     );
   }
 
-  Widget button(BuildContext context) {
+  Widget changeTheme(BuildContext context) {
     return BlocBuilder<ThemeCubit, ThemeMode>(
       builder: (context, themeMode) {
         final isDark = themeMode == ThemeMode.dark;
@@ -114,12 +113,12 @@ class ContactsPage extends StatelessWidget {
 
         return AnimatedContainer(
           duration: const Duration(milliseconds: 300),
-          width: 120,
-          height: 50,
-          padding: const EdgeInsets.all(6),
+          width: 60,
+          height: 38,
+          padding: const EdgeInsets.symmetric(vertical: 6),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(30),
-            color: Colors.red,
+            borderRadius: BorderRadius.circular(16),
+            color: context.colorSchema.onPrimary,
           ),
           child: Stack(
             children: [
@@ -128,10 +127,10 @@ class ContactsPage extends StatelessWidget {
                 alignment:
                     isDark ? Alignment.centerLeft : Alignment.centerRight,
                 child: GestureDetector(
-                  onTap: () => c.toggle(),
+                  onTap: () => c.changeTheme(),
                   child: Container(
                     width: 38,
-                    height: 38,
+                    height: 24,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.white,
@@ -145,8 +144,8 @@ class ContactsPage extends StatelessWidget {
                     ),
                     child: Icon(
                       isDark ? Icons.nightlight_round : Icons.wb_sunny,
-                      color: isDark ? Colors.deepPurple : Colors.orange,
-                      size: 20,
+                      color: isDark ? Colors.black : Colors.amber,
+                      size: 18,
                     ),
                   ),
                 ),
