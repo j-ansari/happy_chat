@@ -6,10 +6,12 @@ import '../../core/constants/app_strings.dart';
 import '../../core/helper/prefs.dart';
 import '../../core/sl.dart';
 import '../../data/repo/chat_repo.dart';
+import '../../view_model/auth/auth_cubit.dart';
 import '../../view_model/chat/chat_cubit.dart';
 import '../../view_model/contacts/contacts_cubit.dart';
 import '../widgets/widgets.dart';
 import 'chat_page.dart';
+import 'login_page.dart';
 
 class ContactsPage extends StatelessWidget {
   const ContactsPage({super.key});
@@ -79,6 +81,19 @@ class ContactsPage extends StatelessWidget {
                 },
               );
             },
+          );
+        },
+      ),
+      fab: CustomButton(
+        title: AppStrings.exit,
+        width: 100,
+        onPressed: () async {
+          await context.read<AuthCubit>().logout().then(
+            (_) => Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (c) => LoginPage()),
+              (_) => false,
+            ),
           );
         },
       ),

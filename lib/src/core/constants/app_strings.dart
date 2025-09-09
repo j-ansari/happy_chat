@@ -15,5 +15,6 @@ class AppStrings {
   static const String notEnteredWorld = 'هنوز به این دنیا وارد نشدی.';
   static const String createPortalForFriend = 'یه پورتال بزن به گوشی رفیقت.';
   static const String writeMessage = 'نوشتن پیام...';
+  static const String exit = 'خروج';
   static const String baseUrl = 'http://193.105.234.224';
 }
