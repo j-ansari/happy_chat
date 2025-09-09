@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:happy_chat_app/src/core/helper/context_extension.dart';
-import 'package:otp_autofill/otp_autofill.dart';
 import 'package:pinput/pinput.dart';
 import '../../core/constants/app_strings.dart';
 import '../../core/helper/convert_number.dart';
@@ -20,37 +19,6 @@ class VerifyPage extends StatefulWidget {
 
 class _VerifyPageState extends State<VerifyPage> {
   final key = GlobalKey<FormState>();
-  late OTPInteractor oTPInteractor;
-  late OTPTextEditController otpController;
-
-  @override
-  void initState() {
-    super.initState();
-    _initOtpInteractor();
-    otpController = OTPTextEditController(
-      codeLength: 4,
-      onCodeReceive: (code) {},
-      otpInteractor: oTPInteractor,
-    )..startListenUserConsent((code) {
-      if (code != null) {
-        otpController.text = code;
-        _verify(code);
-      }
-      return code ?? "";
-    });
-  }
-
-  @override
-  void dispose() {
-    oTPInteractor.stopListenForCode();
-    otpController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _initOtpInteractor() async {
-    oTPInteractor = OTPInteractor();
-    await oTPInteractor.getAppSignature();
-  }
 
   void _verify(String c) {
     final code = ConvertNumber.normalizeDigits(c);
@@ -89,7 +57,6 @@ class _VerifyPageState extends State<VerifyPage> {
               Directionality(
                 textDirection: TextDirection.ltr,
                 child: Pinput(
-                  controller: otpController,
                   length: 4,
                   keyboardType: TextInputType.number,
                   defaultPinTheme: PinTheme(
