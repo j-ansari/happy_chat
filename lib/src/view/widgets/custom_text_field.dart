@@ -7,7 +7,7 @@ class CustomTextField extends StatelessWidget {
   final String? label;
   final Color? borderColor;
   final Color? bgColor;
-  final int? maxLength;
+  final int? maxLines;
   final TextInputType? keyboardType;
   final Function(String)? onChanged;
   final Widget? prefix;
@@ -21,7 +21,7 @@ class CustomTextField extends StatelessWidget {
     this.label,
     this.borderColor,
     this.bgColor,
-    this.maxLength,
+    this.maxLines,
     this.keyboardType,
     this.onChanged,
     this.prefix,
@@ -39,7 +39,8 @@ class CustomTextField extends StatelessWidget {
         TextFormField(
           controller: controller,
           onChanged: onChanged,
-          maxLength: maxLength,
+          maxLines: maxLines,
+          minLines: 1,
           cursorColor: context.colorSchema.outlineVariant,
           keyboardType: keyboardType,
           validator: validator,

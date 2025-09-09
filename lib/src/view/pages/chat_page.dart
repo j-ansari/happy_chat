@@ -134,6 +134,7 @@ class _ChatPageState extends State<ChatPage> {
         label: AppStrings.writeMessage,
         borderColor: Colors.transparent,
         bgColor: context.colorSchema.error.withAlpha(20),
+        maxLines: 3,
         prefix: IconButton(
           icon: Icon(Icons.send),
           onPressed: () {
